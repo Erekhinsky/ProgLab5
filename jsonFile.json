@@ -1,0 +1,30 @@
+{
+	"vehicle" : [
+		{
+			"id": "1635095776",
+			"name": "bicycle",
+			"coordinates": { 
+				"x": "100.0",
+				"y": "200.0"
+			},
+			"creationDate": "2021-10-24",
+			"enginePower": "10",
+			"numberOfWheels": "2",
+			"distanceTravelled": "4.0",
+			"fuelType": "MANPOWER"
+		},
+		{
+			"id": "2147483647",
+			"name": "rocket",
+			"coordinates": { 
+				"x": "300.0",
+				"y": "400.0"
+			},
+			"creationDate": "2021-10-24",
+			"enginePower": "1000",
+			"numberOfWheels": "1",
+			"distanceTravelled": "500.0",
+			"fuelType": "NUCLEAR"
+		}
+	]
+}
