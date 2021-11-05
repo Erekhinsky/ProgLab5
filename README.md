@@ -43,7 +43,7 @@
 
 Описание хранимых в коллекции классов:
 
-public class Vehicle {
+public class Vehicle
 
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пусто
@@ -53,20 +53,16 @@ public class Vehicle {
     private long numberOfWheels; //Значение поля должно быть больше 0
     private float distanceTravelled; //Значение поля должно быть больше 0
     private FuelType fuelType; //Поле не может быть null
-}
 
-public class Coordinates {
+public class Coordinates 
     
     private Double x; //Поле не может быть null
     private Double y; //Поле не может быть null
     
-}
-
-public enum FuelType {
+public enum FuelType 
 
     KEROSENE,
     MANPOWER,
     NUCLEAR,
     PLASMA;
     
-}
