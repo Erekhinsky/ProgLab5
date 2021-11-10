@@ -5,6 +5,7 @@ import collection.VehicleStorage;
 import utils.Parser;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
@@ -24,19 +25,30 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-        String path = args[0];
-        Path p = Paths.get(path);
+        String path;
+
         UserInterface userInteraction = new UserInterface(new InputStreamReader(System.in), true, new OutputStreamWriter(System.out));
         VehicleStorage storage;
         StorageInteraction interactiveStorage = null;
+        try {
+            path = args[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            userInteraction.showMessage("Файла нет.");
+            path = null;
+            System.exit(0);
+        }
 
         boolean firstOpening = true;
 
-        VehicleStorage.getVehicles();
+        Path p = Paths.get(path);
+        boolean exists = Files.exists(p);
+        boolean isDirectory = Files.isDirectory(p);
+        boolean isFile = Files.isRegularFile(p);
 
         try {
-            if (p.toRealPath().toString().length() > 3 && p.toRealPath().toString().trim().startsWith("/dev")) {
-                userInteraction.showMessage("Недопустимый путь к файлу!");
+            if (!exists || isDirectory || !isFile) {
+                userInteraction.showMessage("Недопустимый файл!");
+                System.exit(1);
             } else {
                 while (true) {
                     try {
@@ -44,7 +56,7 @@ public class Main {
                             try {
                                 InputStreamReader isr = new InputStreamReader(new FileInputStream(String.valueOf(p)));
                                 VehicleStorage.vehicles = Parser.readArrayFromFile(isr);
-                                System.out.println("Файл успешно открылся");
+                                userInteraction.showMessage("Файл успешно открылся");
                             } catch (NoSuchElementException e) {
                                 userInteraction.showMessage("Ввод недоступен");
                                 PrintWriter pw = new PrintWriter("errorLog.txt");

@@ -307,7 +307,13 @@ public final class StorageInteraction implements CommandInterface {
      */
     @Override
     public boolean findById(long id) {
-        return storage.getCollection().iterator().next().getId() == id;
+        Vehicle vehicle = new Vehicle();
+        for (Vehicle v : storage.getCollection()) {
+            if (v.getId() == id) {
+                vehicle = v;
+            }
+        }
+        return true;
     }
 
     /**

@@ -8,6 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InterruptedIOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -36,24 +39,31 @@ public class ExecuteScript extends Command {
      * @param commandInterface объект для взаимодействия с коллекцией.
      */
     public void execute(UserInterface ui, String[] arguments, CommandInterface commandInterface) throws Exception {
-        boolean success;
+        boolean success = false;
         try {
             UserInterface scriptInteraction = new UserInterface(new FileReader(arguments[1]), false, new OutputStreamWriter(System.out));
             String line;
             String path = arguments[1];
-            success = true;
-            while (scriptInteraction.hasNextLine()) {
-                line = scriptInteraction.read();
-                String cmd = line.split(" ")[0];
-                if (cmd.equals("execute_script")) {
-                    if (!paths.contains(path)) {
-                        paths.add(path);
-                        CommandCenter.getInstance().executeCommand(scriptInteraction, cmd, line, commandInterface);
-                    } else {
-                        paths.clear();
-                        throw new InvalidAlgorithmParameterException("Выполнение скрипта остановлено, т.к. возможна рекурсия");
-                    }
-                } else CommandCenter.getInstance().executeCommand(scriptInteraction, cmd, line, commandInterface);
+
+            Path p = Paths.get(path);
+            boolean exists = Files.exists(p);
+            boolean isDirectory = Files.isDirectory(p);
+            boolean isFile = Files.isRegularFile(p);
+            if (!p.toRealPath().toString().trim().startsWith("/dev") && exists && !isDirectory && isFile) {
+                success = true;
+                while (scriptInteraction.hasNextLine()) {
+                    line = scriptInteraction.read();
+                    String cmd = line.split(" ")[0];
+                    if (cmd.equals("execute_script")) {
+                        if (!paths.contains(path)) {
+                            paths.add(path);
+                            CommandCenter.getInstance().executeCommand(scriptInteraction, cmd, line, commandInterface);
+                        } else {
+                            paths.clear();
+                            throw new InvalidAlgorithmParameterException("Выполнение скрипта остановлено, т.к. возможна рекурсия");
+                        }
+                    } else CommandCenter.getInstance().executeCommand(scriptInteraction, cmd, line, commandInterface);
+                }
             }
             paths.clear();
             if (success)

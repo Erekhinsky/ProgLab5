@@ -32,7 +32,7 @@ public class Update extends Command {
     public void execute(UserInterface ui, String[] arguments, CommandInterface storageInteraction) throws IOException, IncorrectValueException {
         long id = Long.parseLong(arguments[1]);
         Vehicle vehicle;
-        final Boolean[] checker = {true};
+        final Boolean[] checker = {false};
         VehicleStorage.vehicles.forEach((value) -> {
             if (value.getId() == id) {
                 checker[0] = true;
@@ -41,7 +41,7 @@ public class Update extends Command {
         if (checker[0]) {
             vehicle = ui.readVehicle(ui);
             storageInteraction.update(id, vehicle);
-            ui.showMessage("Сотрудник обновлен");
-        } else ui.showMessage("Сотрудника с таким идентификатором нет");
+            ui.showMessage("Транспорт обновлен");
+        } else ui.showMessage("Транспорта с таким идентификатором нет");
     }
 }
